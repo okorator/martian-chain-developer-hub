@@ -21,9 +21,11 @@ export default function Navbar({ currentPage }) {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to={createPageUrl('Home')} className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-cyan-500 to-emerald-500 flex items-center justify-center">
-              <span className="text-slate-900 font-bold text-sm">M</span>
-            </div>
+            <img 
+              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695018451eeb0d1299e5e65b/4a38de6c7_MartianLogo.png"
+              alt="Martian Chain"
+              className="h-8 w-8 object-contain"
+            />
             <span className="font-semibold text-white hidden sm:block">Martian Chain</span>
           </Link>
 
