@@ -24,7 +24,7 @@ export default function DocsExplorer() {
     },
     {
       title: "Check Gas Settings",
-      description: `Base fee is ${config?.baseFeeGwei || 25} gwei. Ensure your maxFeePerGas is higher.`
+      description: "Query current base fee via eth_feeHistory or provider.getFeeData(). Ensure your maxFeePerGas is higher than current base fee."
     },
     {
       title: "Verify Nonce",
@@ -48,11 +48,15 @@ export default function DocsExplorer() {
           The Martian Chain explorer lets you search transactions, addresses, and blocks.
         </p>
         
-        <a href={config?.explorerUrl} target="_blank" rel="noopener noreferrer">
-          <Button className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600">
-            Open Explorer <ExternalLink className="ml-2 h-4 w-4" />
-          </Button>
-        </a>
+        {config?.explorerUrl ? (
+          <a href={config.explorerUrl} target="_blank" rel="noopener noreferrer">
+            <Button className="bg-gradient-to-r from-cyan-500 via-purple-500 to-orange-500 hover:from-cyan-600 hover:via-purple-600 hover:to-orange-600">
+              Open Explorer <ExternalLink className="ml-2 h-4 w-4" />
+            </Button>
+          </a>
+        ) : (
+          <p className="text-slate-500 text-sm">Explorer URL not configured</p>
+        )}
       </section>
 
       {/* Using the Explorer */}

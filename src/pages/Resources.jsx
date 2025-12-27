@@ -14,25 +14,19 @@ export default function Resources() {
   const config = configs?.[0];
 
   const officialLinks = [
-    {
+    config?.websiteUrl && {
       title: 'Official Website',
       description: 'Learn more about Martian Chain',
-      url: config?.websiteUrl || 'https://martianchain.com',
+      url: config.websiteUrl,
       icon: Globe
     },
-    {
-      title: 'Documentation',
-      description: 'Developer guides and API references',
-      url: config?.docsUrl || 'https://docs.martianchain.com',
-      icon: FileText
-    },
-    {
+    config?.explorerUrl && {
       title: 'Block Explorer',
       description: 'View transactions and addresses',
-      url: config?.explorerUrl || 'https://explorer.martianchain.com',
+      url: config.explorerUrl,
       icon: ExternalLink
     }
-  ];
+  ].filter(Boolean);
 
   const avalancheLinks = [
     {
