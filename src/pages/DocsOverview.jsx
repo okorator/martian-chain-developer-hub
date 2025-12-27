@@ -7,7 +7,6 @@ import { ArrowRight, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ValueDisplay from '@/components/ui/ValueDisplay';
 import CopyButton from '@/components/ui/CopyButton';
-import PlaceholderDataNotice from '@/components/PlaceholderDataNotice';
 
 export default function DocsOverview() {
   const { data: configs } = useQuery({
