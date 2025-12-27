@@ -1,10 +1,7 @@
 import React from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
-import { Link } from 'react-router-dom';
-import { createPageUrl } from '@/utils';
 import { Database } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import ValueDisplay from '@/components/ui/ValueDisplay';
 
 export default function ToolsNetworkRegistry() {
