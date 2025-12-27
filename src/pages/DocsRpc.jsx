@@ -154,7 +154,7 @@ console.log("Balance:", balance);`;
       )}
       
       <Callout type="note" title="Rate Limits & Placeholders">
-        Public RPC endpoints may have rate limits. Replace placeholder values like <RPC_URL> with actual endpoints from the configuration above.
+        Public RPC endpoints may have rate limits. Replace placeholder values like <code>{'<RPC_URL>'}</code> with actual endpoints from the configuration above.
       </Callout>
     </div>
   );
