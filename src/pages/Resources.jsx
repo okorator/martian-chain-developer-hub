@@ -1,6 +1,8 @@
 import React from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
+import { Link } from 'react-router-dom';
+import { createPageUrl } from '@/utils';
 import { ExternalLink, Globe, FileText, Award } from 'lucide-react';
 
 export default function Resources() {
@@ -121,27 +123,27 @@ export default function Resources() {
                   <p className="text-white font-medium">RPC Health Checker</p>
                   <p className="text-slate-400 text-sm">Monitor endpoint status</p>
                 </div>
-                <a href="/tools/rpc-health" className="text-orange-400 hover:text-orange-300 text-sm">
+                <Link to={createPageUrl('ToolsRpcHealth')} className="text-orange-400 hover:text-orange-300 text-sm">
                   Check Now →
-                </a>
+                </Link>
               </li>
               <li className="flex items-center justify-between py-2 border-b border-slate-800 last:border-0">
                 <div>
                   <p className="text-white font-medium">Network Registry</p>
                   <p className="text-slate-400 text-sm">View all network constants</p>
                 </div>
-                <a href="/tools/network-registry" className="text-orange-400 hover:text-orange-300 text-sm">
+                <Link to={createPageUrl('ToolsNetworkRegistry')} className="text-orange-400 hover:text-orange-300 text-sm">
                   View Registry →
-                </a>
+                </Link>
               </li>
               <li className="flex items-center justify-between py-2">
                 <div>
                   <p className="text-white font-medium">Export Network JSON</p>
                   <p className="text-slate-400 text-sm">Download config for SDKs</p>
                 </div>
-                <a href="/tools/export" className="text-orange-400 hover:text-orange-300 text-sm">
+                <Link to={createPageUrl('ToolsExport')} className="text-orange-400 hover:text-orange-300 text-sm">
                   Export →
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
