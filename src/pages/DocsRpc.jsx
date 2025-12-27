@@ -13,8 +13,8 @@ export default function DocsRpc() {
   });
 
   const config = configs?.[0];
-  const rpcUrl = config?.rpcUrls?.[0] || 'https://rpc1.martianchain.com';
-  const wsUrl = config?.wsUrls?.[0] || 'wss://rpc-ws1.martianchain.com';
+  const rpcUrl = config?.rpcUrls?.[0] || '<RPC_URL>';
+  const wsUrl = config?.wsUrls?.[0] || '<WS_URL>';
 
   const curlChainId = `curl -X POST ${rpcUrl} \\
   -H "Content-Type: application/json" \\
@@ -46,9 +46,9 @@ console.log("Block:", blockNumber);
 const network = await provider.getNetwork();
 console.log("Chain ID:", network.chainId);
 
-// Get balance
+// Get balance (replace 0xYOUR_ADDRESS with actual address)
 const balance = await provider.getBalance("0xYOUR_ADDRESS");
-console.log("Balance:", ethers.formatEther(balance), "EROL");`;
+console.log("Balance:", ethers.formatEther(balance), "${config?.nativeTokenSymbol || 'tokens'}");`;
 
   const viemExample = `import { createPublicClient, http } from "viem";
 import { defineChain } from "viem";
@@ -58,7 +58,7 @@ const martianChain = defineChain({
   id: ${config?.chainIdDecimal || 2027},
   name: "${config?.chainName || 'Martian Chain'}",
   nativeCurrency: {
-    name: "${config?.nativeTokenName || 'Erol Musk'}",
+    name: "${config?.nativeTokenName || config?.nativeTokenSymbol || 'EROL'}",
     symbol: "${config?.nativeTokenSymbol || 'EROL'}",
     decimals: 18
   },
@@ -66,7 +66,7 @@ const martianChain = defineChain({
     default: { http: ["${rpcUrl}"] }
   },
   blockExplorers: {
-    default: { name: "Explorer", url: "${config?.explorerUrl || 'https://explorer.martianchain.com'}" }
+    default: { name: "Explorer", url: "${config?.explorerUrl || '<EXPLORER_URL>'}" }
   }
 });
 
@@ -147,8 +147,14 @@ console.log("Balance:", balance);`;
         </Tabs>
       </section>
 
-      <Callout type="note" title="Rate Limits">
-        Public RPC endpoints may have rate limits. For production applications with high traffic, consider running your own node.
+      {(!config?.rpcUrls || config.rpcUrls.length === 0) && (
+        <Callout type="warning" title="Configuration Missing">
+          RPC endpoints are not configured. Please ensure NetworkConfig is properly set up.
+        </Callout>
+      )}
+      
+      <Callout type="note" title="Rate Limits & Placeholders">
+        Public RPC endpoints may have rate limits. Replace placeholder values like <RPC_URL> with actual endpoints from the configuration above.
       </Callout>
     </div>
   );

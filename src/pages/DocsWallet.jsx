@@ -30,19 +30,21 @@ async function addMartianChain() {
         chainId: '${config?.chainIdHex || '0x7EB'}',
         chainName: '${config?.chainName || 'Martian Chain'}',
         nativeCurrency: {
-          name: '${config?.nativeTokenName || 'Erol Musk'}',
+          name: '${config?.nativeTokenName || 'EROL'}',
           symbol: '${config?.nativeTokenSymbol || 'EROL'}',
           decimals: 18  // Standard EVM default
         },
-        rpcUrls: ['${config?.rpcUrls?.[0] || 'https://rpc1.martianchain.com'}'],
-        blockExplorerUrls: ['${config?.explorerUrl || 'https://explorer.martianchain.com'}']
+        rpcUrls: ['${config?.rpcUrls?.[0] || '<RPC_URL>'}'],
+        blockExplorerUrls: ['${config?.explorerUrl || '<EXPLORER_URL>'}']
       }]
     });
     console.log('Network added!');
   } catch (error) {
     console.error('Failed to add network:', error);
   }
-}`;
+}
+
+// Note: Replace <RPC_URL> and <EXPLORER_URL> with actual values from network config`;
 
   const downloadConfig = () => {
     if (!config) return;
@@ -88,8 +90,14 @@ async function addMartianChain() {
           </div>
         )}
 
+        {!config && (
+          <Callout type="warning" title="Configuration Missing">
+            Network configuration is not loaded. Please ensure NetworkConfig is properly set up in the database.
+          </Callout>
+        )}
+        
         <Callout type="note" title="Decimals">
-          Native currency uses 18 decimals (standard EVM default). Change only if Martian Chain differs.
+          Native currency uses 18 decimals (standard EVM default).
         </Callout>
       </section>
 
