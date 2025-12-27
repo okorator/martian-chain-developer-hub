@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
-import { RefreshCw, CheckCircle, XCircle, AlertCircle, Zap } from 'lucide-react';
+import { RefreshCw, CheckCircle, XCircle, AlertCircle, Zap, Server, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export default function ToolsRpcHealth() {
   const { data: configs } = useQuery({
@@ -13,9 +14,12 @@ export default function ToolsRpcHealth() {
 
   const config = configs?.[0];
   const [rpcStatuses, setRpcStatuses] = useState([]);
+  const [serverRpcStatuses, setServerRpcStatuses] = useState([]);
   const [wsStatuses, setWsStatuses] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [serverLoading, setServerLoading] = useState(false);
   const [autoRefresh, setAutoRefresh] = useState(false);
+  const [checkMode, setCheckMode] = useState('browser');
 
   const checkRpcHealth = async () => {
     if (!config?.rpcUrls) return;
@@ -151,8 +155,30 @@ export default function ToolsRpcHealth() {
     setWsStatuses(results);
   };
 
+  const checkServerRpcHealth = async () => {
+    if (!config?.rpcUrls) return;
+
+    setServerLoading(true);
+    try {
+      const result = await base44.functions.checkRpcHealth({
+        urls: config.rpcUrls
+      });
+
+      if (result.results) {
+        setServerRpcStatuses(result.results);
+      }
+    } catch (error) {
+      console.error('Server health check failed:', error);
+    }
+    setServerLoading(false);
+  };
+
   const checkAll = async () => {
-    await Promise.all([checkRpcHealth(), checkWsHealth()]);
+    if (checkMode === 'browser') {
+      await Promise.all([checkRpcHealth(), checkWsHealth()]);
+    } else {
+      await checkServerRpcHealth();
+    }
   };
 
   useEffect(() => {
@@ -204,7 +230,7 @@ export default function ToolsRpcHealth() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold text-white mb-2">RPC Health Checker</h1>
-            <p className="text-slate-400">Monitor endpoint status and performance.</p>
+            <p className="text-slate-400">Monitor endpoint status and performance from both browser and server perspectives.</p>
           </div>
           <div className="flex gap-2">
             <Button
@@ -220,68 +246,156 @@ export default function ToolsRpcHealth() {
             </Button>
             <Button
               onClick={checkAll}
-              disabled={loading}
-              className="bg-orange-500 hover:bg-orange-600"
+              disabled={loading || serverLoading}
+              className="bg-gradient-to-r from-cyan-500 via-purple-500 to-orange-500 hover:from-cyan-600 hover:via-purple-600 hover:to-orange-600"
             >
-              <RefreshCw className={cn("h-4 w-4 mr-2", loading && "animate-spin")} />
-              {loading ? 'Checking...' : 'Refresh'}
+              <RefreshCw className={cn("h-4 w-4 mr-2", (loading || serverLoading) && "animate-spin")} />
+              {(loading || serverLoading) ? 'Checking...' : 'Refresh'}
             </Button>
           </div>
         </div>
 
-        {/* RPC Endpoints */}
-        <section className="mb-8">
-          <h2 className="text-xl font-semibold text-white mb-4">HTTPS RPC Endpoints</h2>
+        <Tabs value={checkMode} onValueChange={setCheckMode} className="mb-8">
+          <TabsList className="grid w-full max-w-md grid-cols-2">
+            <TabsTrigger value="browser" className="flex items-center gap-2">
+              <Globe className="h-4 w-4" />
+              Browser Mode
+            </TabsTrigger>
+            <TabsTrigger value="server" className="flex items-center gap-2">
+              <Server className="h-4 w-4" />
+              Server Mode
+            </TabsTrigger>
+          </TabsList>
 
-          {rpcStatuses.length > 0 && rpcStatuses.every(rpc => rpc.status === 'offline' && rpc.error?.includes('403')) && (
-            <div className="mb-4 p-4 bg-orange-500/10 border border-orange-500/30 rounded-lg">
-              <p className="text-orange-400 text-sm">
-                <strong>⚠️ All endpoints returning 403 Forbidden:</strong> The RPC endpoints may require authentication, API keys, or have IP restrictions. This is not a checker issue - the endpoints are actively blocking requests.
-              </p>
-            </div>
-          )}
-
-          <div className="space-y-3">
-            {rpcStatuses.map((rpc, i) => (
-              <div
-                key={i}
-                className="bg-slate-900/50 border border-slate-800 rounded-lg p-4 flex items-center justify-between"
-              >
-                <div className="flex items-center gap-4 flex-1">
-                  <div className={cn("rounded-lg p-2 border", getStatusColor(rpc.status))}>
-                    {getStatusIcon(rpc.status)}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-mono text-sm text-white truncate">{rpc.url}</p>
-                    {rpc.error && (
-                      <p className="text-xs text-red-400 mt-1">{rpc.error}</p>
-                    )}
-                  </div>
-                </div>
-                <div className="flex items-center gap-6 text-sm">
-                  {rpc.blockNumber && (
-                    <div className="text-right">
-                      <p className="text-slate-400 text-xs">Block</p>
-                      <p className="text-white font-mono">{rpc.blockNumber.toLocaleString()}</p>
-                    </div>
-                  )}
-                  <div className="text-right">
-                    <p className="text-slate-400 text-xs">Latency</p>
-                    <p className={cn("font-mono", getLatencyColor(rpc.latency))}>
-                      {rpc.latency}ms
-                    </p>
-                  </div>
-                </div>
+          <div className="mt-4 p-4 bg-slate-900/50 border border-slate-800 rounded-lg">
+            {checkMode === 'browser' ? (
+              <div>
+                <p className="text-sm text-slate-300 mb-2">
+                  <strong>Browser Mode:</strong> Tests if endpoints are reachable from a web browser (your current device).
+                </p>
+                <p className="text-xs text-slate-400">
+                  403 errors usually mean the endpoint blocks browser requests due to CORS, WAF rules, or authentication requirements.
+                </p>
               </div>
-            ))}
+            ) : (
+              <div>
+                <p className="text-sm text-slate-300 mb-2">
+                  <strong>Server Mode:</strong> Tests endpoints from the Base44 backend server.
+                </p>
+                <p className="text-xs text-slate-400">
+                  This eliminates browser-specific issues and shows true infrastructure health.
+                </p>
+              </div>
+            )}
           </div>
-        </section>
+        </Tabs>
 
-        {/* WebSocket Endpoints */}
-        <section>
-          <h2 className="text-xl font-semibold text-white mb-4">WebSocket Endpoints</h2>
-          <div className="space-y-3">
-            {wsStatuses.map((ws, i) => (
+        {checkMode === 'browser' ? (
+          <>
+            {/* Browser Mode - RPC Endpoints */}
+            <section className="mb-8">
+              <h2 className="text-xl font-semibold text-white mb-4">HTTPS RPC Endpoints (Browser)</h2>
+
+              {rpcStatuses.length > 0 && rpcStatuses.every(rpc => rpc.status === 'offline' && rpc.error?.includes('403')) && (
+                <div className="mb-4 p-4 bg-orange-500/10 border border-orange-500/30 rounded-lg">
+                  <p className="text-orange-400 text-sm">
+                    <strong>⚠️ All endpoints returning 403 Forbidden in browser:</strong> The endpoints are blocking browser-origin requests. Try Server Mode to check if they work from a server.
+                  </p>
+                </div>
+              )}
+
+              <div className="space-y-3">
+                {rpcStatuses.map((rpc, i) => (
+                  <div
+                    key={i}
+                    className="bg-slate-900/50 border border-slate-800 rounded-lg p-4 flex items-center justify-between"
+                  >
+                    <div className="flex items-center gap-4 flex-1">
+                      <div className={cn("rounded-lg p-2 border", getStatusColor(rpc.status))}>
+                        {getStatusIcon(rpc.status)}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-mono text-sm text-white truncate">{rpc.url}</p>
+                        {rpc.error && (
+                          <p className="text-xs text-red-400 mt-1">{rpc.error}</p>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-6 text-sm">
+                      {rpc.blockNumber && (
+                        <div className="text-right">
+                          <p className="text-slate-400 text-xs">Block</p>
+                          <p className="text-white font-mono">{rpc.blockNumber.toLocaleString()}</p>
+                        </div>
+                      )}
+                      <div className="text-right">
+                        <p className="text-slate-400 text-xs">Latency</p>
+                        <p className={cn("font-mono", getLatencyColor(rpc.latency))}>
+                          {rpc.latency}ms
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          </>
+        ) : (
+          <>
+            {/* Server Mode - RPC Endpoints */}
+            <section className="mb-8">
+              <h2 className="text-xl font-semibold text-white mb-4">HTTPS RPC Endpoints (Server)</h2>
+
+              {serverRpcStatuses.length === 0 && !serverLoading && (
+                <div className="p-4 bg-slate-900/50 border border-slate-800 rounded-lg text-center text-slate-400">
+                  Click "Refresh" to check server-side health
+                </div>
+              )}
+
+              <div className="space-y-3">
+                {serverRpcStatuses.map((rpc, i) => (
+                  <div
+                    key={i}
+                    className="bg-slate-900/50 border border-slate-800 rounded-lg p-4 flex items-center justify-between"
+                  >
+                    <div className="flex items-center gap-4 flex-1">
+                      <div className={cn("rounded-lg p-2 border", getStatusColor(rpc.status))}>
+                        {getStatusIcon(rpc.status)}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-mono text-sm text-white truncate">{rpc.url}</p>
+                        {rpc.error && (
+                          <p className="text-xs text-red-400 mt-1">{rpc.error}</p>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-6 text-sm">
+                      {rpc.blockNumber && (
+                        <div className="text-right">
+                          <p className="text-slate-400 text-xs">Block</p>
+                          <p className="text-white font-mono">{rpc.blockNumber.toLocaleString()}</p>
+                        </div>
+                      )}
+                      <div className="text-right">
+                        <p className="text-slate-400 text-xs">Latency</p>
+                        <p className={cn("font-mono", getLatencyColor(rpc.latency))}>
+                          {rpc.latency}ms
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          </>
+        )}
+
+        {/* WebSocket Endpoints - Only in Browser Mode */}
+        {checkMode === 'browser' && (
+          <section>
+            <h2 className="text-xl font-semibold text-white mb-4">WebSocket Endpoints</h2>
+            <div className="space-y-3">
+              {wsStatuses.map((ws, i) => (
               <div
                 key={i}
                 className="bg-slate-900/50 border border-slate-800 rounded-lg p-4 flex items-center justify-between"
@@ -305,10 +419,11 @@ export default function ToolsRpcHealth() {
                 </div>
               </div>
             ))}
-          </div>
-        </section>
+            </div>
+            </section>
+            )}
 
-        {autoRefresh && (
+            {autoRefresh && (
           <p className="text-center text-sm text-slate-500 mt-8">
             Auto-refresh enabled. Checking every 60 seconds.
           </p>
