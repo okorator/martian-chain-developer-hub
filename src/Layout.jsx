@@ -37,7 +37,7 @@ export default function Layout({ children, currentPageName }) {
         }
 
         body {
-          background: linear-gradient(180deg, #0a0e27 0%, #050818 50%, #020510 100%);
+          background-color: rgb(2, 6, 23);
           position: relative;
           overflow-x: hidden;
         }

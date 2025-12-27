@@ -18,20 +18,22 @@ export default function Home() {
   return (
     <div className="min-h-screen relative">
       {/* Hero Section */}
-      <section className="relative overflow-hidden min-h-[85vh] flex items-end pb-8">
-        {/* Subtle radial glow - very subtle */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[800px] bg-gradient-radial from-cyan-500/5 via-transparent to-transparent rounded-full blur-3xl" />
+      <section className="relative overflow-hidden min-h-[80vh] flex items-end pb-16">
+        {/* Background Effects */}
+        <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/10 via-purple-500/5 to-transparent" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-gradient-to-r from-cyan-400/10 via-purple-500/10 to-orange-500/10 rounded-full blur-3xl" />
         
-        {/* Logo - Now in foreground, no glow */}
-        <div className="absolute top-12 left-1/2 -translate-x-1/2 w-[450px] h-[450px] z-10">
+        {/* Logo - Now in foreground */}
+        <div className="absolute top-8 left-1/2 -translate-x-1/2 w-[500px] h-[500px] z-10 opacity-90">
           <img 
             src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695018451eeb0d1299e5e65b/4a38de6c7_MartianLogo.png"
             alt="Martian Chain"
-            className="w-full h-full object-contain"
+            className="w-full h-full object-contain drop-shadow-2xl"
+            style={{ filter: 'drop-shadow(0 0 40px rgba(6, 182, 212, 0.3))' }}
           />
         </div>
         
-        <div className="relative max-w-7xl mx-auto px-4 w-full z-20 pb-4">
+        <div className="relative max-w-7xl mx-auto px-4 w-full z-20">
           <div className="text-center max-w-3xl mx-auto">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-400/30 text-cyan-400 text-sm mb-6">
               <span className="relative flex h-2 w-2">
@@ -76,13 +78,13 @@ export default function Home() {
       </section>
 
       {/* Network Stats */}
-      <section className="max-w-7xl mx-auto px-4 py-12">
+      <section className="max-w-7xl mx-auto px-4 py-16">
         <h2 className="text-xl font-semibold text-white mb-6 text-center">Network at a Glance</h2>
         {config && <NetworkStatsGrid config={config} />}
       </section>
 
       {/* Features Grid */}
-      <section className="max-w-7xl mx-auto px-4 py-12 relative">
+      <section className="max-w-7xl mx-auto px-4 py-16 relative">
         <div className="grid md:grid-cols-3 gap-6">
           <FeatureCard
             icon={Zap}
@@ -103,7 +105,7 @@ export default function Home() {
       </section>
 
       {/* Quick Links */}
-      <section className="max-w-7xl mx-auto px-4 py-12 pb-16">
+      <section className="max-w-7xl mx-auto px-4 py-16">
         <div className="grid md:grid-cols-2 gap-6">
           <QuickLinkCard
             title="Start Building"
