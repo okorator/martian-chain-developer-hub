@@ -40,7 +40,7 @@ export default function AddToMetaMaskButton({ config }) {
     <Button 
       onClick={addNetwork}
       disabled={status === 'loading'}
-      className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white"
+      className="bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-600 hover:to-emerald-600 text-slate-900 font-semibold"
     >
       {status === 'loading' ? (
         <>Adding...</>

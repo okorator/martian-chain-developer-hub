@@ -129,14 +129,14 @@ function ChecklistItem({ step, title, description, linkPage }) {
       to={createPageUrl(linkPage)}
       className="flex items-start gap-4 p-3 rounded-lg hover:bg-slate-800/50 transition-colors group"
     >
-      <div className="h-8 w-8 rounded-full bg-orange-500/20 flex items-center justify-center flex-shrink-0 text-orange-400 font-semibold text-sm">
+      <div className="h-8 w-8 rounded-full bg-cyan-500/20 flex items-center justify-center flex-shrink-0 text-cyan-400 font-semibold text-sm">
         {step}
       </div>
       <div className="flex-1">
-        <h3 className="text-white font-medium group-hover:text-orange-400 transition-colors">{title}</h3>
+        <h3 className="text-white font-medium group-hover:text-cyan-400 transition-colors">{title}</h3>
         <p className="text-slate-400 text-sm">{description}</p>
       </div>
-      <ArrowRight className="h-5 w-5 text-slate-600 group-hover:text-orange-400 transition-colors" />
+      <ArrowRight className="h-5 w-5 text-slate-600 group-hover:text-cyan-400 transition-colors" />
     </Link>
   );
 }
@@ -145,9 +145,9 @@ function DocLink({ title, description, page }) {
   return (
     <Link 
       to={createPageUrl(page)}
-      className="p-4 rounded-lg border border-slate-800 hover:border-orange-500/50 transition-colors group"
+      className="p-4 rounded-lg border border-slate-800 hover:border-cyan-500/50 transition-colors group"
     >
-      <h3 className="text-white font-medium mb-1 group-hover:text-orange-400 transition-colors">{title}</h3>
+      <h3 className="text-white font-medium mb-1 group-hover:text-cyan-400 transition-colors">{title}</h3>
       <p className="text-slate-400 text-sm">{description}</p>
     </Link>
   );
