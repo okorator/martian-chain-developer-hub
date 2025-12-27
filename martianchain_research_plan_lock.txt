@@ -1,0 +1,328 @@
+MartianChain L1 — Competitive Research + Tooling/Docs Plan (Locked Scope)
+Generated: 2025-12-27
+
+===============================================================================
+0) Purpose of this document
+===============================================================================
+Capture the tasks, ideas, plans, research notes, and raw data produced in this chat
+so they can be shared inside the new project and used as a scope anchor to prevent
+scope creep.
+
+Primary goals stated by user:
+- Identify tools/apps/code/docs from other Avalanche L1s that can be duplicated
+  (legally + clean-room implementation, using public/free materials).
+- Perform a competitive dive: progress + popularity signals for each L1.
+- Upgrade MartianChain docs/tools to outshine competition and win Ava Labs grants.
+- Create a Base44 prompt to ship publish-ready docs and initial tooling.
+- (This file) Lock down the research output + tasks/backlog.
+
+===============================================================================
+1) Avalanche L1s in scope (from user list)
+===============================================================================
+- GUNZ (Gunzilla): https://gunbygunz.com/
+- Numbers Protocol: https://numbersprotocol.io/
+- Dexalot: https://dexalot.com/en
+- PlayA3ull: https://playa3ull.games/
+- Step.app: https://step.app/
+- Beam: https://onbeam.com/developers
+- MSU: https://msu.io/
+- Numine: https://numine.io/
+- Coq Inu / CoqNet: https://www.coqinu.com/
+
+===============================================================================
+2) What MartianChain has publicly today (observed during research)
+===============================================================================
+- MartianChain docs include essential network configuration:
+  - Chain IDs, Subnet/Blockchain IDs
+  - RPC + WebSocket endpoints
+  - Contract addresses (validator-related)
+- MartianScan explorer exists and shows chain highlights & activity UI
+- martianchain.com advertises a micro-ecosystem with:
+  - Token Viewer
+  - Wallet connect + balance (placeholder)
+  - Testnet Faucet
+
+Interpretation:
+- Network basics are present publicly.
+- Biggest gap is a “builder funnel” layer:
+  Quickstarts, templates, SDKs, status page, indexer/explorer API docs,
+  operator docs, and a coherent productized dev portal.
+
+===============================================================================
+3) Copyable / reproducible patterns seen across stronger Avalanche L1s
+===============================================================================
+These are “low legal risk” patterns because they are generic and commonly
+implemented; do NOT copy branding or proprietary code/UX.
+
+(1) Canonical “Connect to Network” page
+- Must include: chain ID, RPC/WSS, explorer, wallet add instructions
+- Ideally: Chainlist presence + one-click MetaMask add (EIP-3085)
+
+(2) Public status page
+- Track: RPC, WSS, Explorer, Faucet, Docs, Indexer/API, Bridge
+- Uptime transparency boosts trust (developers, wallets, infra partners)
+
+(3) Operator-grade faucet
+- Multiple faucet options where possible
+- Bot resistance / rate limiting
+- Docs page: “how to get funded” + limitations
+
+(4) Explorer/scanner UX
+- Token/NFT pages, holder lists, transfer views
+- “Developer debugging” guidance: find txs, decode errors, receipts
+
+(5) SDK + API wrappers (especially TS + C#)
+- TS is default for web3; C# is a strong wedge for game studios (Unity)
+- “Network constants” should be generated from a single source of truth
+
+(6) Operator docs even for permissioned networks
+- How to run nodes / track subnet / monitoring
+- Publishing runbooks increases credibility and eases partnership
+
+===============================================================================
+4) Competitive snapshot (high-level)
+===============================================================================
+This snapshot reflects public “builder credibility” signals: docs quality, tooling,
+operational transparency, shipped products, and visible usage indicators.
+
+Top-tier (builder credibility)
+- GUNZ: big product surface (wallet SDKs, scanner, marketplace, minting engine API),
+  permissioned deployment posture. Strong “turnkey gaming infra” positioning.
+- Beam: SDK/API posture (notably TS + C#), developer-first onboarding and chain-info hygiene.
+- Numbers Protocol: strong docs + operational transparency (status page, runbooks). High trust signal.
+
+Mid-tier (real products, lighter dev stack)
+- Dexalot: strong product (exchange). Has chainlist hygiene and onboarding checklists.
+- Step: consumer-app first, chain underneath; publishes node/build hints publicly.
+
+Niche / ecosystem plays
+- Playa3ull: operator clarity; currently not open to third-party validators (per docs).
+- MSU: major brand gravity; third-party explorer/data support posture.
+- Numine: network overview + connection params; game L1 lane.
+- Coq Inu / CoqNet: attention + community engine; builder infra positioning via partners.
+
+Competitive implications:
+- MartianChain can win by being the “open, builder-first L1” with the best public
+  onboarding + OSS tooling, not by trying to out-market major gaming brands.
+
+===============================================================================
+5) “Steal this” list per L1 (feature inspirations to replicate cleanly)
+===============================================================================
+
+A) GUNZ (Gunzilla)
+Replicable patterns:
+- “Developer Products” landing page with concrete offerings.
+- Runbook-style chain docs: RPC options, chainlist, explorer, operational notes.
+- Scanner UX: token/NFT/account views (front-end + indexer).
+Avoid:
+- Do not copy closed-source product implementations (minting engine, marketplace, wallet SDKs).
+- Do not copy branding/assets/text.
+
+B) Numbers Protocol
+Replicable patterns:
+- Docs IA: Users vs Developers vs Operators.
+- Status page across infra components.
+- Multiple faucet options.
+- Public runbooks (subnet operations topics).
+
+C) Beam
+Replicable patterns:
+- SDK-first strategy: TypeScript + C# wrapper libraries.
+- Chain-info repository approach.
+- “API + SDK” marketing posture for builders.
+
+D) Dexalot
+Replicable patterns:
+- “Subnet checklist” onboarding page (2-minute setup).
+- Chain registry hygiene + chainlist entry.
+
+E) Step Network
+Replicable patterns:
+- Publish “node build” posture; public repo(s) for node/build configs (where safe).
+
+F) Playa3ull
+Replicable patterns:
+- Operator clarity: subnet tracking config snippets.
+- Validator program page (even if curated/closed).
+
+G) MSU
+Replicable patterns:
+- Use at least one external explorer/indexing/data partner and document as “official”.
+
+H) Numine
+Replicable patterns:
+- GitBook-like network overview template: confirmations, gas model, rate limits, archive nodes.
+
+I) Coq Inu / CoqNet
+Replicable patterns:
+- Ecosystem directory that drives perceived momentum.
+- Builder infra “incubator” posture.
+
+===============================================================================
+6) MartianChain upgrade backlog (prioritized, “highest leverage”)
+===============================================================================
+Phase 1 — Builder onboarding (must-haves)
+1) Chainlist entry + 1-click “Add Network”
+2) “Deploy in 5 minutes” quickstart:
+   - Hardhat + Foundry, copy/paste ready
+3) Faucet improvements:
+   - bot resistance + rate limiting
+   - clear documentation
+4) Explorer docs:
+   - verification guidance (only if supported)
+   - API endpoints (if available)
+   - token/NFT pages quality
+
+Phase 2 — Tooling moat (grant-friendly)
+5) Public status page
+6) TypeScript SDK + C# SDK
+   - network constants + helper functions
+7) Public “network info” repo
+8) Postman collection for RPC + custom endpoints
+
+Phase 3 — Differentiation
+9) Position as “open builder L1”
+10) Open-source scanner UI starter kit
+11) Ecosystem directory + bounties / hackathons winners list
+
+===============================================================================
+7) Grants narrative (how to package the work)
+===============================================================================
+Grant-friendly framing:
+- “We shipped an Avalanche L1 with public RPC/WSS + explorer”
+- “We open-sourced the developer funnel: SDKs, templates, Postman, status page, faucet”
+- “We can prove adoption with measurable metrics:
+   deployments, unique deployers, tx volume, ecosystem projects”
+
+===============================================================================
+8) Base44 deliverable (what was requested & produced)
+===============================================================================
+A highly specified Base44 prompt was produced to create a publish-ready
+MartianChain Developer Portal with:
+- Public docs site + Tools pages
+- A single-source-of-truth `NetworkConfig` registry table
+- Admin edit + audit log (`NetworkConfigChangeLog`)
+- MetaMask add-network button (EIP-3085)
+- RPC health checker tool (eth_blockNumber ping, response time, WSS connect test)
+- Export network JSON tool
+- Docs pages:
+  Overview, Quickstart, Wallet setup, RPC/WSS, Explorer, Contracts & Addresses,
+  Dev Recipes (read/send/events), Troubleshooting, Changelog
+
+Core principle:
+- “Build the tool first” (network registry + SDK constants), then use the tool to
+  build subsequent features.
+
+===============================================================================
+9) RAW DATA — Verified MartianChain network constants (single source of truth)
+===============================================================================
+Chain:
+- chainName: "Martian Chain"
+- chainIdDecimal: 2027
+- chainIdHex: "0x7EB"
+- blockTimeSeconds: 2
+- gasLimit: 15000000
+- baseFeeGwei: 25
+
+Native token:
+- name: "Erol Musk"
+- symbol: "EROL"  (display as $EROL)
+- totalSupply: "1000000000"
+
+Owner addresses:
+- ownerAddressCChain: "0x2DF94D61536820970B84C9d8DACd5B2b04adF0c6"
+- ownerAddressPChain: "P-avax1dh7qmzu22qjf0sv6ake2tde8h6p5usfxtcq72p"
+
+Network identifiers:
+- subnetId: "KQnyo57ynwQ5QD1xcLYySYSVxvR1yQCU3vmH7krZ6XLhZjSrV"
+- blockchainId: "QCdAaQnYx6XMyr7NbSXwMizeFmqx1vA4Rd1LBGrnxf96mdNL6"
+- conversionTxId: "NbjWyHV5U8S5KUZ5irWbr84jyr9k5EjPCKL6Jgs5rDS2Kvnxo"
+
+Contracts:
+- validatorMessagesLibraryAddress: "0x268c240aa0e8c8e6e0a01f94373e0fa50da6d914"
+- validatorManagerContractAddress: "0xc2b68ba87061ca3d3c0b203151e1112cee1f612d"
+
+RPC URLs:
+1) https://rpc1.martianchain.com
+2) https://rpc2.martianchain.com
+3) https://rpc3.martianchain.com
+4) https://rpc4.martianchain.com
+5) https://rpc5.martianchain.com
+
+WebSocket URLs:
+1) wss://rpc-ws1.martianchain.com
+2) wss://rpc-ws2.martianchain.com
+3) wss://rpc-ws3.martianchain.com
+4) wss://rpc-ws4.martianchain.com
+5) wss://rpc-ws5.martianchain.com
+
+URLs:
+- explorerUrl: https://explorer.martianchain.com
+- docsUrl: https://docs.martianchain.com
+- websiteUrl: https://martianchain.com
+
+===============================================================================
+10) Scope lock: what is IN vs OUT for this project phase
+===============================================================================
+IN SCOPE (Phase 1-2)
+- Publish professional docs portal + network registry + health checker + export JSON
+- Add-network UX + chainlist hygiene work
+- SDK constants library (TS first, then C#), generated from NetworkConfig
+- Foundry/Hardhat templates and “Dev Recipes”
+- Status page (basic), faucet hardening (rate limiting/bot resistance)
+- Explorer usage docs and debugging checklists
+
+OUT OF SCOPE (for now; explicitly excluded to prevent creep)
+- Building a full marketplace, minting engine, or wallet SDK suite (GUNZ-level)
+- Building proprietary game backend infrastructure
+- Complex cross-chain bridge design (can be revisited later)
+- Deep tokenomics / market making / exchange features (Dexalot-like)
+- Massive partner integrations (post MVP)
+
+===============================================================================
+11) Next steps checklist (actionable)
+===============================================================================
+Immediate (this week)
+- [ ] Ship the Base44 doc portal MVP per spec
+- [ ] Add “NetworkConfig” as the single source of truth and render it throughout docs
+- [ ] Implement tools pages: RPC Health, Export JSON
+- [ ] Add MetaMask add-network + manual instructions
+- [ ] Publish Quickstart with Foundry + Hardhat templates
+
+Near-term
+- [ ] Create @martianchain/sdk (TypeScript): constants + helper clients (ethers/viem)
+- [ ] Create martianchain/network-info repo mirroring chain-info style
+- [ ] Add status page for RPC/WSS/Explorer/Faucet
+- [ ] Harden faucet against bots
+- [ ] Add ecosystem directory + “Launch on MartianChain” form
+
+Metrics to track (grant-ready)
+- # unique deployers
+- # deployed contracts
+- tx volume
+- active addresses
+- RPC uptime metrics (from status + health tools)
+- ecosystem projects list
+
+===============================================================================
+12) Research sources referenced during investigation (URLs only)
+===============================================================================
+Primary list (user-provided):
+- https://gunbygunz.com/
+- https://numbersprotocol.io/
+- https://dexalot.com/en
+- https://playa3ull.games/
+- https://step.app/
+- https://onbeam.com/developers
+- https://msu.io/
+- https://numine.io/
+- https://www.coqinu.com/
+
+MartianChain public endpoints:
+- https://martianchain.com
+- https://docs.martianchain.com
+- https://explorer.martianchain.com
+
+===============================================================================
+End of locked-scope document
+===============================================================================
