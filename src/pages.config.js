@@ -14,6 +14,7 @@ import ToolsExport from './pages/ToolsExport';
 import Resources from './pages/Resources';
 import DocsRecipeRead from './pages/DocsRecipeRead';
 import DocsRecipeSend from './pages/DocsRecipeSend';
+import About from './pages/About';
 import __Layout from './Layout.jsx';
 
 
@@ -34,6 +35,7 @@ export const PAGES = {
     "Resources": Resources,
     "DocsRecipeRead": DocsRecipeRead,
     "DocsRecipeSend": DocsRecipeSend,
+    "About": About,
 }
 
 export const pagesConfig = {
