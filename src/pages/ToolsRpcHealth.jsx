@@ -1,62 +1,70 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
-import { RefreshCw, CheckCircle, XCircle, AlertCircle, Zap, Info } from 'lucide-react';
+import { RefreshCw, CheckCircle, XCircle, AlertCircle, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 export default function ToolsRpcHealth() {
-  const { data: configs, isPending, isError, error } = useQuery({
+  const { data: configs } = useQuery({
     queryKey: ['networkConfig'],
     queryFn: () => base44.entities.NetworkConfig.list(),
   });
 
   const config = configs?.[0];
-  const hasRpcUrls = Array.isArray(config?.rpcUrls) && config.rpcUrls.length > 0;
-  const hasWsUrls = Array.isArray(config?.wsUrls) && config.wsUrls.length > 0;
   const [rpcStatuses, setRpcStatuses] = useState([]);
   const [wsStatuses, setWsStatuses] = useState([]);
   const [loading, setLoading] = useState(false);
   const [autoRefresh, setAutoRefresh] = useState(false);
 
   const checkRpcHealth = async () => {
-    if (!hasRpcUrls) {
-      setRpcStatuses([]);
-      return;
-    }
-    
+    if (!config?.rpcUrls) return;
+
     setLoading(true);
     const results = await Promise.all(
-      config.rpcUrls.map(async (url, index) => {
+      config.rpcUrls.map(async (url) => {
         const start = Date.now();
         try {
           const response = await fetch(url, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
             body: JSON.stringify({
               jsonrpc: '2.0',
               method: 'eth_blockNumber',
               params: [],
               id: 1
             }),
-            signal: AbortSignal.timeout(5000)
+            signal: AbortSignal.timeout(10000)
           });
-          
-          if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-          }
-          
-          const text = await response.text();
-          let data;
-          try {
-            data = JSON.parse(text);
-          } catch {
-            throw new Error('Invalid JSON response');
-          }
-          
+
           const latency = Date.now() - start;
+
+          if (!response.ok) {
+            const errorText = await response.text().catch(() => '');
+            let errorDetail = `HTTP ${response.status}`;
+
+            if (response.status === 403) {
+              errorDetail = 'Access Forbidden (403) - May need authentication or IP whitelisting';
+            } else if (response.status === 429) {
+              errorDetail = 'Rate Limited (429)';
+            } else if (response.status === 502 || response.status === 503) {
+              errorDetail = `Service Unavailable (${response.status})`;
+            }
+
+            return {
+              url,
+              status: 'offline',
+              latency,
+              error: errorDetail
+            };
+          }
+
+          const data = await response.json();
           const blockNumber = data.result ? parseInt(data.result, 16) : null;
-          
+
           return {
             url,
             status: 'online',
@@ -64,11 +72,20 @@ export default function ToolsRpcHealth() {
             blockNumber
           };
         } catch (error) {
+          const latency = Date.now() - start;
+          let errorMsg = error.message;
+
+          if (error.name === 'AbortError' || error.message.includes('timeout')) {
+            errorMsg = 'Request timeout (>10s)';
+          } else if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+            errorMsg = 'Network error - CORS or connection blocked';
+          }
+
           return {
             url,
             status: 'offline',
-            latency: Date.now() - start,
-            error: error.message
+            latency,
+            error: errorMsg
           };
         }
       })
@@ -78,47 +95,55 @@ export default function ToolsRpcHealth() {
   };
 
   const checkWsHealth = async () => {
-    if (!hasWsUrls) {
-      setWsStatuses([]);
-      return;
-    }
+    if (!config?.wsUrls) return;
 
     const results = await Promise.all(
       config.wsUrls.map(async (url) => {
         return new Promise((resolve) => {
           const start = Date.now();
-          const ws = new WebSocket(url);
-          let settled = false;
+          let ws;
 
-          const finish = (status) => {
-            if (settled) return;
-            settled = true;
-            clearTimeout(timeout);
-            try {
-              ws.close();
-            } catch {
-            }
+          try {
+            ws = new WebSocket(url);
+          } catch (error) {
             resolve({
               url,
-              status,
-              latency: Date.now() - start
+              status: 'failed',
+              latency: Date.now() - start,
+              error: 'WebSocket creation failed'
+            });
+            return;
+          }
+
+          const timeout = setTimeout(() => {
+            ws.close();
+            resolve({
+              url,
+              status: 'timeout',
+              latency: Date.now() - start,
+              error: 'Connection timeout (>10s)'
+            });
+          }, 10000);
+
+          ws.onopen = () => {
+            clearTimeout(timeout);
+            const latency = Date.now() - start;
+            ws.close();
+            resolve({
+              url,
+              status: 'connected',
+              latency
             });
           };
 
-          const timeout = setTimeout(() => {
-            finish('timeout');
-          }, 5000);
-
-          ws.onopen = () => {
-            finish('connected');
-          };
-
-          ws.onerror = () => {
-            finish('failed');
-          };
-
-          ws.onclose = () => {
-            finish('closed');
+          ws.onerror = (error) => {
+            clearTimeout(timeout);
+            resolve({
+              url,
+              status: 'failed',
+              latency: Date.now() - start,
+              error: 'Connection failed - May be blocked or unreachable'
+            });
           };
         });
       })
@@ -131,15 +156,9 @@ export default function ToolsRpcHealth() {
   };
 
   useEffect(() => {
-    if (!config) {
-      setRpcStatuses([]);
-      setWsStatuses([]);
-      return;
+    if (config) {
+      checkAll();
     }
-
-    setRpcStatuses([]);
-    setWsStatuses([]);
-    checkAll();
   }, [config]);
 
   useEffect(() => {
@@ -195,14 +214,13 @@ export default function ToolsRpcHealth() {
                 "border-slate-700",
                 autoRefresh && "bg-orange-500/10 border-orange-500/30 text-orange-400"
               )}
-              disabled={isPending || !config}
             >
               <Zap className="h-4 w-4 mr-2" />
               {autoRefresh ? 'Auto On' : 'Auto Off'}
             </Button>
             <Button
               onClick={checkAll}
-              disabled={loading || isPending || !config}
+              disabled={loading}
               className="bg-orange-500 hover:bg-orange-600"
             >
               <RefreshCw className={cn("h-4 w-4 mr-2", loading && "animate-spin")} />
@@ -211,31 +229,22 @@ export default function ToolsRpcHealth() {
           </div>
         </div>
 
-        {isPending && (
-          <div className="mb-8 bg-slate-900/50 border border-slate-800 rounded-lg p-4 text-slate-400">
-            Loading network configuration...
-          </div>
-        )}
-
-        {isError && (
-          <div className="mb-8 bg-red-500/10 border border-red-500/30 rounded-lg p-4 text-sm text-red-200 flex items-center gap-2">
-            <Info className="h-4 w-4" />
-            Failed to load network configuration: {error?.message || 'Unknown error'}
-          </div>
-        )}
-
         {/* RPC Endpoints */}
         <section className="mb-8">
           <h2 className="text-xl font-semibold text-white mb-4">HTTPS RPC Endpoints</h2>
-          {!hasRpcUrls && (
-            <div className="bg-slate-900/50 border border-slate-800 rounded-lg p-4 text-slate-400 text-sm">
-              No RPC endpoints configured for this network.
+
+          {rpcStatuses.length > 0 && rpcStatuses.every(rpc => rpc.status === 'offline' && rpc.error?.includes('403')) && (
+            <div className="mb-4 p-4 bg-orange-500/10 border border-orange-500/30 rounded-lg">
+              <p className="text-orange-400 text-sm">
+                <strong>⚠️ All endpoints returning 403 Forbidden:</strong> The RPC endpoints may require authentication, API keys, or have IP restrictions. This is not a checker issue - the endpoints are actively blocking requests.
+              </p>
             </div>
           )}
+
           <div className="space-y-3">
-            {rpcStatuses.map((rpc) => (
+            {rpcStatuses.map((rpc, i) => (
               <div
-                key={rpc.url}
+                key={i}
                 className="bg-slate-900/50 border border-slate-800 rounded-lg p-4 flex items-center justify-between"
               >
                 <div className="flex items-center gap-4 flex-1">
@@ -271,15 +280,10 @@ export default function ToolsRpcHealth() {
         {/* WebSocket Endpoints */}
         <section>
           <h2 className="text-xl font-semibold text-white mb-4">WebSocket Endpoints</h2>
-          {!hasWsUrls && (
-            <div className="bg-slate-900/50 border border-slate-800 rounded-lg p-4 text-slate-400 text-sm">
-              No WebSocket endpoints configured for this network.
-            </div>
-          )}
           <div className="space-y-3">
-            {wsStatuses.map((ws) => (
+            {wsStatuses.map((ws, i) => (
               <div
-                key={ws.url}
+                key={i}
                 className="bg-slate-900/50 border border-slate-800 rounded-lg p-4 flex items-center justify-between"
               >
                 <div className="flex items-center gap-4 flex-1">
@@ -288,6 +292,9 @@ export default function ToolsRpcHealth() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="font-mono text-sm text-white truncate">{ws.url}</p>
+                    {ws.error && (
+                      <p className="text-xs text-red-400 mt-1">{ws.error}</p>
+                    )}
                   </div>
                 </div>
                 <div className="text-right">
