@@ -15,7 +15,7 @@ export default function DocsQuickstart() {
   });
 
   const config = configs?.[0];
-  const rpcUrl = config?.rpcUrls?.[0] || 'https://rpc1.martianchain.com';
+  const rpcUrl = config?.rpcUrls?.[0] || '<RPC_URL>';
 
   const curlChainId = `curl -X POST ${rpcUrl} \\
   -H "Content-Type: application/json" \\
@@ -86,7 +86,7 @@ npm install --save-dev hardhat @nomicfoundation/hardhat-toolbox
 # Initialize Hardhat
 npx hardhat init
 
-# Set your private key (never commit this!)
+# Set your private key (never commit this! Replace with your actual key)
 export PRIVATE_KEY="your_private_key_here"
 
 # Compile and deploy
@@ -119,7 +119,7 @@ contract Counter {
 }
 EOF
 
-# Deploy (replace with your private key)
+# Deploy (REPLACE YOUR_PRIVATE_KEY with your actual private key)
 forge create --rpc-url ${rpcUrl} \\
   --private-key YOUR_PRIVATE_KEY \\
   src/Counter.sol:Counter`;
@@ -202,8 +202,8 @@ forge create --rpc-url ${rpcUrl} \\
           </a>. Follow the explorer's verification instructions.
         </Callout>
 
-        <Callout type="warning" title="EVM Version">
-          Set Solidity <code>evmVersion</code> to <code>"cancun"</code> for best compatibility with Avalanche Subnet EVM.
+        <Callout type="warning" title="EVM Version & Placeholders">
+          Set Solidity <code>evmVersion</code> to <code>"cancun"</code> for best compatibility with Avalanche Subnet EVM. Replace placeholder values like YOUR_PRIVATE_KEY and &lt;RPC_URL&gt; with actual values.
         </Callout>
       </section>
 
