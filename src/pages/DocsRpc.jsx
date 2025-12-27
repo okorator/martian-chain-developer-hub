@@ -125,7 +125,7 @@ console.log("Balance:", balance);`;
         <h2 className="text-xl font-semibold text-white mb-4">Code Examples</h2>
         
         <Tabs defaultValue="curl" className="w-full">
-          <TabsList className="bg-slate-800 border border-slate-700">
+          <TabsList className="bg-slate-800 border border-slate-700 shadow-lg shadow-purple-500/10">
             <TabsTrigger value="curl" className="data-[state=active]:bg-slate-700">curl</TabsTrigger>
             <TabsTrigger value="ethers" className="data-[state=active]:bg-slate-700">ethers v6</TabsTrigger>
             <TabsTrigger value="viem" className="data-[state=active]:bg-slate-700">viem</TabsTrigger>
