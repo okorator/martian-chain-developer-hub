@@ -61,7 +61,7 @@ export default function Sidebar({ currentPage }) {
                       className={cn(
                         "flex items-center gap-2 px-2 py-1.5 rounded-lg text-sm transition-colors",
                         isActive 
-                          ? "bg-orange-500/10 text-orange-400 font-medium"
+                          ? "bg-cyan-500/10 text-cyan-400 font-medium"
                           : "text-slate-300 hover:bg-slate-800 hover:text-white"
                       )}
                     >

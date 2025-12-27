@@ -23,15 +23,6 @@ export default function Home() {
         <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/10 via-transparent to-transparent" />
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-cyan-400/10 rounded-full blur-3xl" />
         
-        {/* Alien Hero Image */}
-        <div className="absolute right-0 top-0 w-1/2 h-full opacity-20 md:opacity-30 pointer-events-none">
-          <img 
-            src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695018451eeb0d1299e5e65b/8704428dc_G7t2cDdXUAEDbVA-fotor-20251227133143.png"
-            alt="Martian Explorer"
-            className="w-full h-full object-contain object-right"
-          />
-        </div>
-        
         <div className="relative max-w-7xl mx-auto px-4 py-24 md:py-32">
           <div className="text-center max-w-3xl mx-auto">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-400/30 text-cyan-400 text-sm mb-6">
@@ -99,15 +90,6 @@ export default function Home() {
             icon={Box}
             title="EVM Compatible"
             description="Deploy existing Solidity contracts with zero modifications."
-          />
-        </div>
-        
-        {/* Decorative Alien Image */}
-        <div className="absolute -bottom-20 -right-10 w-64 h-64 opacity-10 pointer-events-none hidden lg:block">
-          <img 
-            src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695018451eeb0d1299e5e65b/8704428dc_G7t2cDdXUAEDbVA-fotor-20251227133143.png"
-            alt="Martian Explorer"
-            className="w-full h-full object-contain"
           />
         </div>
       </section>
