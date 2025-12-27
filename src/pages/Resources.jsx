@@ -116,7 +116,7 @@ export default function Resources() {
         {/* Dev Tools */}
         <section className="mb-12">
           <h2 className="text-xl font-semibold text-white mb-6">Developer Tools</h2>
-          <div className="bg-slate-900/50 border border-slate-800 rounded-xl p-6 shadow-lg shadow-purple-500/10">
+          <div className="bg-slate-900/50 border border-slate-800 rounded-xl p-6">
             <ul className="space-y-3">
               <li className="flex items-center justify-between py-2 border-b border-slate-800 last:border-0">
                 <div>

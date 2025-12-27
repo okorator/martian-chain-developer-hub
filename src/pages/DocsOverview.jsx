@@ -39,7 +39,7 @@ export default function DocsOverview() {
       <p className="text-slate-400 mb-8">Everything you need to build on Martian Chain.</p>
 
       {/* Quick Start Checklist */}
-      <div className="bg-slate-900/50 border border-slate-800 rounded-xl p-6 mb-8 shadow-lg shadow-purple-500/10">
+      <div className="bg-slate-900/50 border border-slate-800 rounded-xl p-6 mb-8">
         <h2 className="text-lg font-semibold text-white mb-4">Quick Start Checklist</h2>
         <div className="space-y-3">
           <ChecklistItem 
@@ -65,7 +65,7 @@ export default function DocsOverview() {
 
       {/* Network Config Widget */}
       {config && (
-        <div className="bg-slate-900/50 border border-slate-800 rounded-xl p-6 mb-8 shadow-lg shadow-cyan-500/10">
+        <div className="bg-slate-900/50 border border-slate-800 rounded-xl p-6 mb-8">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-white">Network Config</h2>
             <div className="flex gap-2">
@@ -147,7 +147,7 @@ function DocLink({ title, description, page }) {
       to={createPageUrl(page)}
       className="p-4 rounded-lg border border-slate-800 hover:border-cyan-500/50 transition-colors group"
     >
-      <h3 className="text-white font-medium mb-1 group-hover:text-purple-400 transition-colors">{title}</h3>
+      <h3 className="text-white font-medium mb-1 group-hover:text-cyan-400 transition-colors">{title}</h3>
       <p className="text-slate-400 text-sm">{description}</p>
     </Link>
   );

@@ -18,22 +18,21 @@ export default function Home() {
   return (
     <div className="min-h-screen relative">
       {/* Hero Section */}
-      <section className="relative overflow-hidden min-h-[80vh] flex items-end pb-16">
+      <section className="relative overflow-hidden">
         {/* Background Effects */}
         <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/10 via-purple-500/5 to-transparent" />
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-gradient-to-r from-cyan-400/10 via-purple-500/10 to-orange-500/10 rounded-full blur-3xl" />
         
-        {/* Logo - Now in foreground */}
-        <div className="absolute top-8 left-1/2 -translate-x-1/2 w-[500px] h-[500px] z-10 opacity-90">
+        {/* Logo Background */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] opacity-10">
           <img 
             src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695018451eeb0d1299e5e65b/4a38de6c7_MartianLogo.png"
             alt="Martian Chain"
-            className="w-full h-full object-contain drop-shadow-2xl"
-            style={{ filter: 'drop-shadow(0 0 40px rgba(6, 182, 212, 0.3))' }}
+            className="w-full h-full object-contain"
           />
         </div>
         
-        <div className="relative max-w-7xl mx-auto px-4 w-full z-20">
+        <div className="relative max-w-7xl mx-auto px-4 py-24 md:py-32">
           <div className="text-center max-w-3xl mx-auto">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-400/30 text-cyan-400 text-sm mb-6">
               <span className="relative flex h-2 w-2">
@@ -127,8 +126,8 @@ export default function Home() {
 
 function FeatureCard({ icon: Icon, title, description }) {
   return (
-    <div className="p-6 rounded-xl bg-slate-900/50 border border-slate-800 hover:border-purple-500/50 transition-all group shadow-lg hover:shadow-purple-500/20">
-      <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-cyan-500/10 to-purple-500/10 flex items-center justify-center mb-4 group-hover:from-cyan-500/20 group-hover:to-purple-500/20 transition-colors shadow-inner">
+    <div className="p-6 rounded-xl bg-slate-900/50 border border-slate-800 hover:border-purple-500/30 transition-all group">
+      <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-cyan-500/10 to-purple-500/10 flex items-center justify-center mb-4 group-hover:from-cyan-500/20 group-hover:to-purple-500/20 transition-colors">
         <Icon className="h-5 w-5 text-cyan-400 group-hover:text-purple-400 transition-colors" />
       </div>
       <h3 className="text-lg font-semibold text-white mb-2">{title}</h3>
@@ -141,7 +140,7 @@ function QuickLinkCard({ title, description, linkText, linkPage }) {
   return (
     <Link 
       to={createPageUrl(linkPage)}
-      className="block p-6 rounded-xl bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700 hover:border-orange-500/70 transition-all group hover:shadow-2xl hover:shadow-orange-500/25"
+      className="block p-6 rounded-xl bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700 hover:border-orange-500/50 transition-all group hover:shadow-lg hover:shadow-orange-500/10"
     >
       <h3 className="text-lg font-semibold text-white mb-2">{title}</h3>
       <p className="text-slate-400 text-sm mb-4">{description}</p>
