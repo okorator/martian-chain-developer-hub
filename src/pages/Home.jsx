@@ -19,21 +19,23 @@ export default function Home() {
     <div className="min-h-screen relative">
       {/* Hero Section */}
       <section className="relative overflow-hidden">
-        {/* Background Effects */}
+        {/* Nebula Background Effects */}
         <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/10 via-purple-500/5 to-transparent" />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-gradient-to-r from-cyan-400/10 via-purple-500/10 to-orange-500/10 rounded-full blur-3xl" />
+        <div className="absolute top-20 left-1/4 w-[500px] h-[500px] bg-cyan-400/15 rounded-full blur-3xl" />
+        <div className="absolute top-40 right-1/4 w-[600px] h-[600px] bg-purple-500/20 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 left-1/2 -translate-x-1/2 w-[700px] h-[500px] bg-orange-500/15 rounded-full blur-3xl" />
         
-        {/* Logo Background */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] opacity-10">
-          <img 
-            src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695018451eeb0d1299e5e65b/4a38de6c7_MartianLogo.png"
-            alt="Martian Chain"
-            className="w-full h-full object-contain"
-          />
-        </div>
-        
-        <div className="relative max-w-7xl mx-auto px-4 py-24 md:py-32">
+        <div className="relative max-w-7xl mx-auto px-4 py-16 md:py-20">
           <div className="text-center max-w-3xl mx-auto">
+            {/* Logo */}
+            <div className="flex justify-center mb-8">
+              <img 
+                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695018451eeb0d1299e5e65b/921265803_MartianLogo-fotor-20251227135857.png"
+                alt="Martian Chain"
+                className="w-64 h-64 md:w-80 md:h-80 object-contain"
+              />
+            </div>
+            
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-400/30 text-cyan-400 text-sm mb-6">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>

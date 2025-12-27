@@ -22,7 +22,7 @@ export default function Navbar({ currentPage }) {
           {/* Logo */}
           <Link to={createPageUrl('Home')} className="flex items-center gap-2">
             <img 
-              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695018451eeb0d1299e5e65b/4a38de6c7_MartianLogo.png"
+              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695018451eeb0d1299e5e65b/921265803_MartianLogo-fotor-20251227135857.png"
               alt="Martian Chain"
               className="h-8 w-8 object-contain"
             />
