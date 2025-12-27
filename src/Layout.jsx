@@ -21,7 +21,7 @@ export default function Layout({ children, currentPageName }) {
           --card-foreground: 210 40% 98%;
           --popover: 222.2 84% 4.9%;
           --popover-foreground: 210 40% 98%;
-          --primary: 25 95% 53%;
+          --primary: 167 100% 50%;
           --primary-foreground: 210 40% 98%;
           --secondary: 217.2 32.6% 17.5%;
           --secondary-foreground: 210 40% 98%;
@@ -33,13 +33,43 @@ export default function Layout({ children, currentPageName }) {
           --destructive-foreground: 210 40% 98%;
           --border: 217.2 32.6% 17.5%;
           --input: 217.2 32.6% 17.5%;
-          --ring: 25 95% 53%;
+          --ring: 167 100% 50%;
         }
-        
+
         body {
           background-color: rgb(2, 6, 23);
+          position: relative;
+          overflow-x: hidden;
         }
-        
+
+        body::before {
+          content: '';
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-image: 
+            radial-gradient(2px 2px at 20% 30%, white, transparent),
+            radial-gradient(2px 2px at 60% 70%, white, transparent),
+            radial-gradient(1px 1px at 50% 50%, white, transparent),
+            radial-gradient(1px 1px at 80% 10%, white, transparent),
+            radial-gradient(2px 2px at 90% 60%, white, transparent),
+            radial-gradient(1px 1px at 33% 80%, white, transparent),
+            radial-gradient(1px 1px at 15% 15%, white, transparent);
+          background-size: 200% 200%;
+          background-position: 0% 0%;
+          animation: twinkle 8s ease-in-out infinite;
+          pointer-events: none;
+          opacity: 0.6;
+          z-index: 0;
+        }
+
+        @keyframes twinkle {
+          0%, 100% { opacity: 0.6; transform: scale(1); }
+          50% { opacity: 1; transform: scale(1.2); }
+        }
+
         ::-webkit-scrollbar {
           width: 8px;
           height: 8px;

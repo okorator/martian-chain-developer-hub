@@ -21,8 +21,8 @@ export default function Navbar({ currentPage }) {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to={createPageUrl('Home')} className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center">
-              <span className="text-white font-bold text-sm">M</span>
+            <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-cyan-500 to-emerald-500 flex items-center justify-center">
+              <span className="text-slate-900 font-bold text-sm">M</span>
             </div>
             <span className="font-semibold text-white hidden sm:block">Martian Chain</span>
           </Link>
@@ -36,7 +36,7 @@ export default function Navbar({ currentPage }) {
                 className={cn(
                   "px-3 py-2 rounded-lg text-sm font-medium transition-colors",
                   currentPage === item.page || currentPage?.startsWith('Docs') && item.page === 'DocsOverview'
-                    ? "text-orange-400 bg-orange-500/10"
+                    ? "text-cyan-400 bg-cyan-500/10"
                     : "text-slate-300 hover:text-white hover:bg-slate-800"
                 )}
               >
@@ -70,7 +70,7 @@ export default function Navbar({ currentPage }) {
                   className={cn(
                     "px-3 py-2 rounded-lg text-sm font-medium",
                     currentPage === item.page
-                      ? "text-orange-400 bg-orange-500/10"
+                      ? "text-cyan-400 bg-cyan-500/10"
                       : "text-slate-300 hover:bg-slate-800"
                   )}
                 >

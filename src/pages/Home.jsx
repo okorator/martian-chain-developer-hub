@@ -16,26 +16,35 @@ export default function Home() {
   const config = configs?.[0];
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen relative">
       {/* Hero Section */}
       <section className="relative overflow-hidden">
         {/* Background Effects */}
-        <div className="absolute inset-0 bg-gradient-to-b from-orange-500/5 via-transparent to-transparent" />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-orange-500/10 rounded-full blur-3xl" />
+        <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/10 via-transparent to-transparent" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-cyan-400/10 rounded-full blur-3xl" />
+        
+        {/* Alien Hero Image */}
+        <div className="absolute right-0 top-0 w-1/2 h-full opacity-20 md:opacity-30 pointer-events-none">
+          <img 
+            src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695018451eeb0d1299e5e65b/8704428dc_G7t2cDdXUAEDbVA-fotor-20251227133143.png"
+            alt="Martian Explorer"
+            className="w-full h-full object-contain object-right"
+          />
+        </div>
         
         <div className="relative max-w-7xl mx-auto px-4 py-24 md:py-32">
           <div className="text-center max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-400 text-sm mb-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-400/30 text-cyan-400 text-sm mb-6">
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-orange-500"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
               </span>
               Mainnet Live
             </div>
             
             <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
               Martian Chain
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-red-500">
+              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-emerald-400">
                 High-Performance L1 for Builders
               </span>
             </h1>
@@ -46,19 +55,19 @@ export default function Home() {
             
             <div className="flex flex-wrap justify-center gap-4">
               <Link to={createPageUrl('DocsOverview')}>
-                <Button size="lg" className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600">
+                <Button size="lg" className="bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-600 hover:to-emerald-600 text-slate-900 font-semibold">
                   Read Docs <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
               
               <a href={config?.explorerUrl} target="_blank" rel="noopener noreferrer">
-                <Button size="lg" variant="outline" className="border-slate-700 hover:bg-slate-800">
+                <Button size="lg" variant="outline" className="border-cyan-500/30 hover:bg-cyan-500/10 text-cyan-400">
                   Open Explorer <ExternalLink className="ml-2 h-4 w-4" />
                 </Button>
               </a>
               
               <Link to={createPageUrl('ToolsRpcHealth')}>
-                <Button size="lg" variant="outline" className="border-slate-700 hover:bg-slate-800">
+                <Button size="lg" variant="outline" className="border-cyan-500/30 hover:bg-cyan-500/10 text-cyan-400">
                   <Activity className="mr-2 h-4 w-4" /> RPC Health
                 </Button>
               </Link>
@@ -74,7 +83,7 @@ export default function Home() {
       </section>
 
       {/* Features Grid */}
-      <section className="max-w-7xl mx-auto px-4 py-16">
+      <section className="max-w-7xl mx-auto px-4 py-16 relative">
         <div className="grid md:grid-cols-3 gap-6">
           <FeatureCard
             icon={Zap}
@@ -90,6 +99,15 @@ export default function Home() {
             icon={Box}
             title="EVM Compatible"
             description="Deploy existing Solidity contracts with zero modifications."
+          />
+        </div>
+        
+        {/* Decorative Alien Image */}
+        <div className="absolute -bottom-20 -right-10 w-64 h-64 opacity-10 pointer-events-none hidden lg:block">
+          <img 
+            src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695018451eeb0d1299e5e65b/8704428dc_G7t2cDdXUAEDbVA-fotor-20251227133143.png"
+            alt="Martian Explorer"
+            className="w-full h-full object-contain"
           />
         </div>
       </section>
@@ -117,9 +135,9 @@ export default function Home() {
 
 function FeatureCard({ icon: Icon, title, description }) {
   return (
-    <div className="p-6 rounded-xl bg-slate-900/50 border border-slate-800 hover:border-slate-700 transition-colors">
-      <div className="h-10 w-10 rounded-lg bg-orange-500/10 flex items-center justify-center mb-4">
-        <Icon className="h-5 w-5 text-orange-400" />
+    <div className="p-6 rounded-xl bg-slate-900/50 border border-slate-800 hover:border-cyan-500/30 transition-colors group">
+      <div className="h-10 w-10 rounded-lg bg-cyan-500/10 flex items-center justify-center mb-4 group-hover:bg-cyan-500/20 transition-colors">
+        <Icon className="h-5 w-5 text-cyan-400" />
       </div>
       <h3 className="text-lg font-semibold text-white mb-2">{title}</h3>
       <p className="text-slate-400 text-sm">{description}</p>
@@ -131,11 +149,11 @@ function QuickLinkCard({ title, description, linkText, linkPage }) {
   return (
     <Link 
       to={createPageUrl(linkPage)}
-      className="block p-6 rounded-xl bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700 hover:border-orange-500/50 transition-all group"
+      className="block p-6 rounded-xl bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700 hover:border-cyan-500/50 transition-all group"
     >
       <h3 className="text-lg font-semibold text-white mb-2">{title}</h3>
       <p className="text-slate-400 text-sm mb-4">{description}</p>
-      <span className="text-orange-400 text-sm font-medium inline-flex items-center group-hover:gap-2 transition-all">
+      <span className="text-cyan-400 text-sm font-medium inline-flex items-center group-hover:gap-2 transition-all">
         {linkText} <ArrowRight className="h-4 w-4 ml-1" />
       </span>
     </Link>
