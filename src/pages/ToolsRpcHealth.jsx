@@ -1,24 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
-import { RefreshCw, CheckCircle, XCircle, AlertCircle, Zap } from 'lucide-react';
+import { RefreshCw, CheckCircle, XCircle, AlertCircle, Zap, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 export default function ToolsRpcHealth() {
-  const { data: configs } = useQuery({
+  const { data: configs, isPending, isError, error } = useQuery({
     queryKey: ['networkConfig'],
     queryFn: () => base44.entities.NetworkConfig.list(),
   });
 
   const config = configs?.[0];
+  const hasRpcUrls = Array.isArray(config?.rpcUrls) && config.rpcUrls.length > 0;
+  const hasWsUrls = Array.isArray(config?.wsUrls) && config.wsUrls.length > 0;
   const [rpcStatuses, setRpcStatuses] = useState([]);
   const [wsStatuses, setWsStatuses] = useState([]);
   const [loading, setLoading] = useState(false);
   const [autoRefresh, setAutoRefresh] = useState(false);
 
   const checkRpcHealth = async () => {
-    if (!config?.rpcUrls) return;
+    if (!hasRpcUrls) {
+      setRpcStatuses([]);
+      return;
+    }
     
     setLoading(true);
     const results = await Promise.all(
@@ -73,40 +78,47 @@ export default function ToolsRpcHealth() {
   };
 
   const checkWsHealth = async () => {
-    if (!config?.wsUrls) return;
-    
+    if (!hasWsUrls) {
+      setWsStatuses([]);
+      return;
+    }
+
     const results = await Promise.all(
       config.wsUrls.map(async (url) => {
         return new Promise((resolve) => {
           const start = Date.now();
           const ws = new WebSocket(url);
-          
-          const timeout = setTimeout(() => {
-            ws.close();
-            resolve({
-              url,
-              status: 'timeout',
-              latency: Date.now() - start
-            });
-          }, 5000);
-          
-          ws.onopen = () => {
+          let settled = false;
+
+          const finish = (status) => {
+            if (settled) return;
+            settled = true;
             clearTimeout(timeout);
-            ws.close();
+            try {
+              ws.close();
+            } catch {
+            }
             resolve({
               url,
-              status: 'connected',
+              status,
               latency: Date.now() - start
             });
           };
-          
+
+          const timeout = setTimeout(() => {
+            finish('timeout');
+          }, 5000);
+
+          ws.onopen = () => {
+            finish('connected');
+          };
+
           ws.onerror = () => {
-            clearTimeout(timeout);
-            resolve({
-              url,
-              status: 'failed',
-              latency: Date.now() - start
-            });
+            finish('failed');
+          };
+
+          ws.onclose = () => {
+            finish('closed');
           };
         });
       })
@@ -119,9 +131,15 @@ export default function ToolsRpcHealth() {
   };
 
   useEffect(() => {
-    if (config) {
-      checkAll();
+    if (!config) {
+      setRpcStatuses([]);
+      setWsStatuses([]);
+      return;
     }
+
+    setRpcStatuses([]);
+    setWsStatuses([]);
+    checkAll();
   }, [config]);
 
   useEffect(() => {
@@ -177,13 +195,14 @@ export default function ToolsRpcHealth() {
                 "border-slate-700",
                 autoRefresh && "bg-orange-500/10 border-orange-500/30 text-orange-400"
               )}
+              disabled={isPending || !config}
             >
               <Zap className="h-4 w-4 mr-2" />
               {autoRefresh ? 'Auto On' : 'Auto Off'}
             </Button>
             <Button
               onClick={checkAll}
-              disabled={loading}
+              disabled={loading || isPending || !config}
               className="bg-orange-500 hover:bg-orange-600"
             >
               <RefreshCw className={cn("h-4 w-4 mr-2", loading && "animate-spin")} />
@@ -192,13 +211,31 @@ export default function ToolsRpcHealth() {
           </div>
         </div>
 
+        {isPending && (
+          <div className="mb-8 bg-slate-900/50 border border-slate-800 rounded-lg p-4 text-slate-400">
+            Loading network configuration...
+          </div>
+        )}
+
+        {isError && (
+          <div className="mb-8 bg-red-500/10 border border-red-500/30 rounded-lg p-4 text-sm text-red-200 flex items-center gap-2">
+            <Info className="h-4 w-4" />
+            Failed to load network configuration: {error?.message || 'Unknown error'}
+          </div>
+        )}
+
         {/* RPC Endpoints */}
         <section className="mb-8">
           <h2 className="text-xl font-semibold text-white mb-4">HTTPS RPC Endpoints</h2>
+          {!hasRpcUrls && (
+            <div className="bg-slate-900/50 border border-slate-800 rounded-lg p-4 text-slate-400 text-sm">
+              No RPC endpoints configured for this network.
+            </div>
+          )}
           <div className="space-y-3">
-            {rpcStatuses.map((rpc, i) => (
+            {rpcStatuses.map((rpc) => (
               <div
-                key={i}
+                key={rpc.url}
                 className="bg-slate-900/50 border border-slate-800 rounded-lg p-4 flex items-center justify-between"
               >
                 <div className="flex items-center gap-4 flex-1">
@@ -234,10 +271,15 @@ export default function ToolsRpcHealth() {
         {/* WebSocket Endpoints */}
         <section>
           <h2 className="text-xl font-semibold text-white mb-4">WebSocket Endpoints</h2>
+          {!hasWsUrls && (
+            <div className="bg-slate-900/50 border border-slate-800 rounded-lg p-4 text-slate-400 text-sm">
+              No WebSocket endpoints configured for this network.
+            </div>
+          )}
           <div className="space-y-3">
-            {wsStatuses.map((ws, i) => (
+            {wsStatuses.map((ws) => (
               <div
-                key={i}
+                key={ws.url}
                 className="bg-slate-900/50 border border-slate-800 rounded-lg p-4 flex items-center justify-between"
               >
                 <div className="flex items-center gap-4 flex-1">
