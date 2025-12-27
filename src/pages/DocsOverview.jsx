@@ -147,7 +147,7 @@ function DocLink({ title, description, page }) {
       to={createPageUrl(page)}
       className="p-4 rounded-lg border border-slate-800 hover:border-cyan-500/50 transition-colors group"
     >
-      <h3 className="text-white font-medium mb-1 group-hover:text-cyan-400 transition-colors">{title}</h3>
+      <h3 className="text-white font-medium mb-1 group-hover:text-purple-400 transition-colors">{title}</h3>
       <p className="text-slate-400 text-sm">{description}</p>
     </Link>
   );
